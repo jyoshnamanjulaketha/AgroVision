@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crop Yield Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: 
+        linear-gradient(135deg, rgba(100, 99, 99, 0.6), rgba(92, 92, 92, 0.2)),
+        url('/static/images/background.png'); /* Path to your image */
+            /*background: linear-gradient(135deg, #f3e7e9, #e3eeff);
+            font-family: 'Arial', sans-serif;
+            background-image: url('/static/images/bbbb.jpg'); /* Update the path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .card {
+            background-color: transparent; /* Make card background transparent */
+            border: none;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 100px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .card {
+            background-color: rgba(80, 81, 81, 0.3); /* Use rgba for transparency */
+   
+    border-radius: 10px;
+    border: 1px solid #9ce8f1;
+    backdrop-filter: blur(0.5px); /* Optional: Add a blur effect to enhance visibility */
+    padding: 10px 15px; /* Adjust padding as needed */
+    margin-top: -15px; /* Adjust margin as needed */
+}
+        .header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: #0072ff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            z-index: 3;
+        }
+        .header img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .navbar-nav {
+            margin-left: auto;
+        }
+        .navbar-nav .nav-item .nav-link {
+            color: white;
+            font-weight: bold;
+        }
+        .dropdown-menu {
+            background-color: #0072ff;
+
+        }
+        
+        .dropdown-item {
+            color: white;
+            
+        }
+        .dropdown-item:hover {
+            background-color: #0056b3;
+        }
+        .form-control-dark {
+            background-color: #f8f9fa !important;
+            border: 1px solid #ced4da;
+            color: #495057 !important;
+            box-shadow: none !important;
+        }
+        .text-pink {
+            color: #000000;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .item-image {
+            display: none;
+    margin-top: 15px;
+    width: 50%; /* Reduce the width to 50% */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px
+        }
+        .predict-button {
+            background-color: #d63384;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .predict-button:hover {
+            background-color: #bd125e;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+    .header-title {
+    color: #73ff00;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    font-weight: bold; /* or use a numeric value like 700 for thickness */
+    background-color: #efefef;/* Set your desired background color */
+    border: 1px solid #9ce8f1;
+    background-color: rgba(96, 96, 96, 0.1); /* Use rgba for transparency */
+    padding: 0px; /* Adjust padding as needed */
+    border-radius: 10px; /* Optional: Adds rounded corners */
+    margin-top: -50px; 
+}
+
+        .sub-title {
+            color: #87ff17;
+            margin-bottom: 10px;
+            font-weight: bold; 
+        }
+        #predictionDisplay h3 {
+            font-size: 2.5rem;
+            color: #77ff00;
+            font-weight: bold;
+        }
+        .error-message {
+            color: rgb(136, 255, 0);
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+    
+</head>
+<body>
+    <!-- Header with logo and navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary header">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="/static/images/logo.png" alt="Agro Vision Logo">
+                <h1>Agro Vision</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Profile
+                        </a>
+                        <ul class="dropdown-menu" id="customDropdown" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/change_password">Change Password</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">LogOut</a></li>
+
+                        </ul>
+                    </li>
+                    <style>
+                        #customDropdown {
+                            right: auto;   /* Override default behavior */
+                            left: -60px;   /* Move dropdown to the left */
+                        }
+                    </style>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container py-5">
+        <h1 class="text-center header-title">🌳Crop Yield Prediction Per Country</h1>
+        <div class="card text-dark">
+            <div class="card-body">
+                <h2 class="text-center sub-title">Input All Features Here</h2>
+                <form action="{{ url_for('predict_crop') }}" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="Year" class="form-label">Year</label>
+                            <input type="number" class="form-control form-control-dark" required name="Year" placeholder="Ex:2013">
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <label for="average_rain_fall_mm_per_year" class="form-label">Average Rainfall (mm/year)</label>
+                            <input type="number" class="form-control form-control-dark" required name="average_rain_fall_mm_per_year"  placeholder="Ex:1200">
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <label for="pesticides_tonnes" class="form-label text-pink">Pesticides (tonnes)</label>
+                            <input type="number" class="form-control form-control-dark" required name="pesticides_tonnes"  placeholder="Ex:6">
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <label for="avg_temp" class="form-label text-pink">Average Temperature (°C)</label>
+                            <input type="number" class="form-control form-control-dark" required name="avg_temp" placeholder="Ex:23">
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Area" class="form-label text-pink">Area</label>
+                            <select class="form-control form-control-dark" required name="Area" id="Area">
+                                <option value="" selected disabled>Select Area</option>
+                                <!-- Add all country options here -->
+                                <option value="Albania">Albania</option>
+                                <option value="Algeria">Algeria</option>
+                                <option value="Angola">Angola</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="Armenia">Armenia</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Austria">Austria</option>
+                                <option value="Azerbaijan">Azerbaijan</option>
+                                <option value="Bahamas">Bahamas</option>
+                                <option value="Bahrain">Bahrain</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                                <option value="Belarus">Belarus</option>
+                                <option value="Belgium">Belgium</option>
+                                <option value="Botswana">Botswana</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="Bulgaria">Bulgaria</option>
+                                <option value="Burkina Faso">Burkina Faso</option>
+                                <option value="Burundi">Burundi</option>
+                                <option value="Cameroon">Cameroon</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Central African Republic">Central African Republic</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Croatia">Croatia</option>
+                                <option value="Denmark">Denmark</option>
+                                <option value="Dominican Republic">Dominican Republic</option>
+                                <option value="Ecuador">Ecuador</option>
+                                <option value="Egypt">Egypt</option>
+                                <option value="El Salvador">El Salvador</option>
+                                <option value="Eritrea">Eritrea</option>
+                                <option value="Estonia">Estonia</option>
+                                <option value="Finland">Finland</option>
+                                <option value="France">France</option>
+                                <option value="Germany">Germany</option>
+                                <option value="Ghana">Ghana</option>
+                                <option value="Greece">Greece</option>
+                                <option value="Guatemala">Guatemala</option>
+                                <option value="Guinea">Guinea</option>
+                                <option value="Guyana">Guyana</option>
+                                <option value="Haiti">Haiti</option>
+                                <option value="Honduras">Honduras</option>
+                                <option value="Hungary">Hungary</option>
+                                <option value="India">India</option>
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="Iraq">Iraq</option>
+                                <option value="Ireland">Ireland</option>
+                                <option value="Italy">Italy</option>
+                                <option value="Jamaica">Jamaica</option>
+                                <option value="Japan">Japan</option>
+                                <option value="Kazakhstan">Kazakhstan</option>
+                                <option value="Kenya">Kenya</option>
+                                <option value="Latvia">Latvia</option>
+                                <option value="Lebanon">Lebanon</option>
+                                <option value="Lesotho">Lesotho</option>
+                                <option value="Libya">Libya</option>
+                                <option value="Lithuania">Lithuania</option>
+                                <option value="Madagascar">Madagascar</option>
+                                <option value="Malawi">Malawi</option>
+                                <option value="Malaysia">Malaysia</option>
+                                <option value="Mali">Mali</option>
+                                <option value="Mauritania">Mauritania</option>
+                                <option value="Mauritius">Mauritius</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Nepal">Nepal</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Nicaragua">Nicaragua</option>
+                                <option value="Niger">Niger</option>
+                                <option value="Norway">Norway</option>
+                                <option value="Pakistan">Pakistan</option>
+                                <option value="Papua New Guinea">Papua New Guinea</option>
+                                <option value="Peru">Peru</option>
+                                <option value="Poland">Poland</option>
+                                <option value="Portugal">Portugal</option>
+                                <option value="Qatar">Qatar</option>
+                                <option value="Romania">Romania</option>
+                                <option value="Rwanda">Rwanda</option>
+                                <option value="Saudi Arabia">Saudi Arabia</option>
+                                <option value="Senegal">Senegal</option>
+                                <option value="Slovenia">Slovenia</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="Spain">Spain</option>
+                                <option value="Sri Lanka">Sri Lanka</option>
+                                <option value="Sudan">Sudan</option>
+                                <option value="Suriname">Suriname</option>
+                                <option value="Sweden">Sweden</option>
+                                <option value="Switzerland">Switzerland</option>
+                                <option value="Tajikistan">Tajikistan</option>
+                                <option value="Thailand">Thailand</option>
+                                <option value="Tunisia">Tunisia</option>
+                                <option value="Turkey">Turkey</option>
+                                <option value="Uganda">Uganda</option>
+                                <option value="Ukraine">Ukraine</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Uruguay">Uruguay</option>
+                                <option value="Zambia">Zambia</option>
+                                <option value="Zimbabwe">Zimbabwe</option>
+                            </select>
+                            <div id="Area-error" class="error-message"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Item" class="form-label text-pink">Item</label>
+                            <select class="form-control form-control-dark"  required name="Item" id="Item" onchange="showItemImage()">
+                                <option value="" selected disabled>Select Item</option>
+                                <option value="Maize" data-image="{{ url_for('static', filename='images/maize.png') }}">Maize</option>
+                                <option value="Potatoes" data-image="{{ url_for('static', filename='images/potatoes.jpeg') }}">Potatoes</option>
+                                <option value="Rice, paddy" data-image="{{ url_for('static', filename='images/rice.png') }}">Rice, paddy</option>
+                                <option value="Sorghum" data-image="{{ url_for('static', filename='images/sorghum.png') }}">Sorghum</option>
+                                <option value="Soybeans" data-image="{{ url_for('static', filename='images/soybeans.png') }}">Soybeans</option>
+                                <option value="Cassava" data-image="{{ url_for('static', filename='images/cassava.png') }}">Cassava</option>
+                                <option value="Wheat" data-image="{{ url_for('static', filename='images/wheat.png') }}">Wheat</option>
+                                <option value="Sweet potatoes" data-image="{{ url_for('static', filename='images/sweet_potatoes.png') }}">Sweet potatoes</option>
+                                <option value="Plantains and others" data-image="{{ url_for('static', filename='images/plantains.png') }}">Plantains and others</option>
+                                <option value="Yams" data-image="{{ url_for('static', filename='images/yams.png') }}">Yams</option>
+                            </select>
+                            <img id="itemImage" class="item-image" src="" alt="Item Image">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-danger btn-lg mt-3 w-100 predict-button">Predict</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="predictionDisplay" class="text-center mt-4">
+                    {% if prediction %}
+                        <h3>Predicted Yield: {{ prediction }}</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        function showItemImage() {
+            var itemSelect = document.getElementById("Item");
+            var selectedOption = itemSelect.options[itemSelect.selectedIndex];
+            var itemImage = document.getElementById("itemImage");
+
+            if (selectedOption.value) {
+                itemImage.src = selectedOption.getAttribute("data-image");
+                itemImage.style.display = "inline-block";
+            } else {
+                itemImage.style.display = "none";
+            }
+        }
+
+        document.getElementById('predictionForm').addEventListener('submit', function(event) {
+            // Check if all required fields are filled
+            var year = document.getElementById('Year').value;
+            var rainfall = document.getElementById('average_rain_fall_mm_per_year').value;
+            var pesticides = document.getElementById('pesticides_tonnes').value;
+            var temp = document.getElementById('avg_temp').value;
+            var area = document.getElementById('Area').value;
+
+            if (!year || !rainfall || !pesticides || !temp || !area) {
+                event.preventDefault(); // Prevent form submission
+                document.getElementById('error-message').style.display = 'block'; // Show error message
+            } else {
+                document.getElementById('error-message').style.display = 'none'; // Hide error message
+            }
+        });
+
+        
+    </script>
+</body>
+</html>

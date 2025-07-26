@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Data Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+            color: #555;
+        }
+        select, input[type="date"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            color: #fff;
+            background: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Data</h1>
+        <form action="/fetch_weather" method="POST">
+            <label for="location">Location:</label>
+            <select id="location" name="location" required>
+                <option value="" disabled selected>Select a location</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Kolkata">Kolkata</option>
+            </select>
+
+            <label for="date">Reference Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <button type="submit">Get Weather Data</button>
+        </form>
+    </div>
+</body>
+</html>

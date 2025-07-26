@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Agro Vision</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background: linear-gradient(135deg , #ff7eb3, #ff758c, #85d3ff, #ffd085,
+                rgba(255, 182, 193, 1),  /* Light Pink */
+                rgba(255, 223, 186, 1),  /* Peach */
+                rgba(255, 255, 204, 1),  /* Pale Yellow */
+                rgba(204, 255, 204, 1),  /* Light Green */
+                rgba(204, 229, 255, 1),  /* Light Blue */
+                rgba(229, 204, 255, 1),  /* Light Purple */
+                rgba(224, 204, 255, 1)); /* Lavender */
+            background-size: 400% 400%;
+            animation: rainbowLightAnimation 10s ease infinite;
+        }
+
+        @keyframes rainbowLightAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 114, 255, 0.8); /* Semi-transparent blue */
+            padding: 10px 20px;
+            color: white;
+        }
+
+        .header img {
+            width: 50px;
+            margin-right: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #0072ff;
+        }
+
+        .container p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .section {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .section img {
+            width: 300px;
+            border-radius: 10px;
+            margin-left: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Agro Vision Logo">
+        <h1>Agro Vision</h1>
+    </div>
+
+    <!-- About page content -->
+    <div class="container">
+        <h2>About Agro Vision</h2>
+        <p>Agro Vision is a comprehensive platform designed to assist farmers and agricultural professionals in making informed decisions. 
+        Our tools include crop recommendation systems, crop yield prediction models, and a disease prediction system with traditional steps for mitigation.</p>
+        <p>We aim to provide practical, easy-to-use tools for anyone in the agricultural field, from small-scale farmers to large agricultural enterprises. 
+        The platform integrates machine learning models to optimize recommendations and enhance productivity.</p>
+        
+        <!-- Section about Home Page -->
+        <div class="section">
+            <div class="section-content">
+                <h2>Home Page Overview</h2>
+                <p>The Agro Vision home page provides easy navigation to essential features such as crop recommendation, yield prediction, and disease prediction. 
+                The interface is intuitive, allowing users to quickly access the tools they need to improve their agricultural practices.</p>
+            </div>
+            <img src="{{ url_for('static', filename='images/homepage.png') }}" alt="Agro Vision Home Page">
+        </div>
+
+        <!-- Section about Crop Recommendation -->
+        <div class="section">
+            <div class="section-content">
+                <h2>Crop Recommendation</h2>
+                <p>Our crop recommendation tool analyzes various parameters such as soil type, weather conditions, and historical data to suggest the best crops to grow. 
+                It helps farmers make informed decisions to maximize yield and profitability while considering environmental sustainability.</p>
+            </div>
+            <img src="{{ url_for('static', filename='images/crop_recommendation.png') }}" alt="Crop Recommendation">
+        </div>
+
+        <!-- Section about Yield Prediction -->
+        <div class="section">
+            <div class="section-content">
+                <h2>Yield Prediction</h2>
+                <p>The yield prediction feature uses machine learning models to estimate potential crop yield based on factors like climate, soil health, and agricultural practices. 
+                This tool helps farmers plan their resources efficiently and optimize crop management for better outcomes.</p>
+            </div>
+            <img src="{{ url_for('static', filename='images/yield_prediction.png') }}" alt="Yield Prediction">
+        </div>
+    </div>
+</body>
+</html>
